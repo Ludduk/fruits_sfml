@@ -1,9 +1,10 @@
 #include "Animator.h"
 #include "Actor.h"
+#include <math.h>
 
 float get_rad(sf::Vector2f const vector)
 {
-    return sqrt(vector.x * vector.x + vector.y * vector.y);;
+    return std::sqrt(vector.x * vector.x + vector.y * vector.y);;
 }
 
 sf::Vector2f normalization(sf::Vector2f const vector)
@@ -32,28 +33,6 @@ sf::Vector2f rading_vector(sf::Vector2f const vector)
     return vector;
 }
 
-class A
-{
-    
-    char c;
-public:
-    int x = 10;
-    A(char s) : c(s)
-    {
-    }
-
-    virtual char get_c() { return c; }
-
-    virtual ~A() {}
-};
-
-class B : public A
-{
-public:
-    //int x = 2;
-    B(char s) : A(s) { x = 2; }
-};
-
 int main()
 {
     
@@ -62,15 +41,15 @@ int main()
     sf::Sprite sprite;
 
     sprite.setPosition(sf::Vector2f(500.f, 400.f));
-    Actor actor(sprite, TYPES::FRUIT, 10.f, 100.f, 50.f);
+    Actor<Fruit> actor(sprite, TYPES::FRUIT, 10.f, 100.f, 50.f);
     
     std::cout << actor.get_obj_ptr()->get_states_count();
 
-    actor.add_animation("walk_right", "images\\apple_animation.png", sf::seconds(0.5), true, sf::Vector2i(0, 0), sf::Vector2i(48, 48), 6, 1);
+    actor.add_animation("walk_right", "images//apple_animation.png", sf::seconds(0.5), true, sf::Vector2i(0, 0), sf::Vector2i(48, 48), 6, 1);
 
     actor.create_relations("walk_right", Fruit::FRUIT_STATES::MOVE_RIGHT);
 
-    actor.add_animation("walk_left", "images\\apple_animation.png", sf::seconds(0.5), true, sf::Vector2i(49, 49), sf::Vector2i(48, 48), 6, 1);
+    actor.add_animation("walk_left", "images//apple_animation.png", sf::seconds(0.5), true, sf::Vector2i(49, 49), sf::Vector2i(48, 48), 6, 1);
 
     actor.create_relations("walk_left", Fruit::FRUIT_STATES::MOVE_LEFT);
 

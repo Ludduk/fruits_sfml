@@ -1,4 +1,5 @@
 #pragma once
+
 #include "General.h"
 
 class Object //терпильный объект, который просто получает урон
@@ -8,8 +9,8 @@ class Object //терпильный объект, который просто получает урон
 	static const int states_count = 2;
 	bool* states = new bool[states_count] {false, false}; //состояние, в которых может находиться объект
 public:
-	const float MASS;
-	const float MAX_HEALTH;
+	float MASS;
+	float MAX_HEALTH;
 	int x, y;
 
 	enum OBJECT_STATES //перечисление, созданное для удобства использования состояний
@@ -18,7 +19,9 @@ public:
 		DESTROYED
 	};
 
-	Object(float mass_, float max_health_);
+	Object(float mass_ = 1.f, float max_health_ = 100.f);
+
+    Object(const Object& obj);
 
 	virtual void set_state(int number, bool val);
 
@@ -30,6 +33,19 @@ public:
 
 	virtual bool is_alive();
 
+    Object& operator = (const Object& obj)
+    {
+        if (this == &obj)
+            return *this;
+        
+        MASS = obj.MASS;
+        MAX_HEALTH = obj.MAX_HEALTH;
+        x = obj.x;
+        y = obj.y;
+        health = obj.health;
+        return *this;
+    }
+
 	~Object();
 };
 
@@ -40,7 +56,6 @@ class Fruit : public Object //может дать по роже
 	static const int states_count = 9;
 	bool* states = new bool[states_count];
 public:
-	//порядок важен, чем больше номер, тем приоритетнее состояние(то есть при одновременном ударе и движении, удар будет в приоритете)
 	enum FRUIT_STATES
 	{
 		MOVE_DOWN,
@@ -53,9 +68,25 @@ public:
 		HIT_RIGHT,
 		DEAD
 	};
-	const float STRENGTH;
+	float STRENGTH, MASS, MAX_HEALTH;
 
-	Fruit(float mass_, float max_health_, float strength_);
+	Fruit(float mass_ = 1.f, float max_health_ = 100.f, float strength_ = 50.f);
 
+    Fruit(const Fruit& ft);
+
+    Fruit& operator = (const Fruit& ft)
+    {
+        if (this == &ft)
+            return *this;
+        
+        MASS = ft.MASS;
+        MAX_HEALTH = ft.MAX_HEALTH;
+        
+        x = ft.x;
+        y = ft.y;
+        health = ft.health;
+        STRENGTH  = ft.STRENGTH;
+        return *this;
+    }
 	~Fruit();
 };

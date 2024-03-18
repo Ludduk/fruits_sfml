@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <list>
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "General.h"
 
 class Animator

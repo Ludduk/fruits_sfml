@@ -9,6 +9,16 @@ Object::Object(float mass_, float max_health) : MASS(mass_), MAX_HEALTH(max_heal
 		states[i] = false;
 }
 
+Object::Object(const Object& obj) : MASS(obj.MASS), MAX_HEALTH(obj.MAX_HEALTH)
+{
+    health = obj.health;
+    x = obj.x;
+    y = obj.y;
+    
+	for (int i = 0; i < states_count; i++)
+        states[i] = false;
+}
+
 void Object::set_state(int number, bool val)
 {
 	if (number >= 0 and number < states_count)
@@ -51,6 +61,17 @@ Fruit::Fruit(float mass_, float max_health_, float strength_) : Object::Object(m
 	health = max_health_;
 	for (int i = 0; i < states_count; i++)
 		states[i] = false;
+}
+
+
+Fruit::Fruit(const Fruit& ft) : MASS(ft.MASS), MAX_HEALTH(ft.MAX_HEALTH)
+{
+    health = ft.health;
+    x = ft.x;
+    y = ft.y;
+    
+	for (int i = 0; i < states_count; i++)
+        states[i] = false;
 }
 
 Fruit::~Fruit()
