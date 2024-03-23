@@ -15,7 +15,8 @@ class Actor //класс, с которым будет работать движок, в нём персонаж объединяетс
 
 public:
 	
-Actor(sf::Sprite& sprite_, TYPES type_, float mass, float max_health, float strength) : sprite(sprite_), anim(Animator(sprite_)), body(Body<T>(type_, mass, max_health, strength)) {}
+Actor(sf::Sprite& sprite_, TYPES type_, float mass, float max_health, float strength) : sprite(sprite_), anim(Animator(sprite_)),
+    body(Body<T>(mass, max_health, strength)) {}
 
 void add_animation(std::string name, std::string path, sf::Time duration, bool looping, sf::Vector2i const& start,
         sf::Vector2i const& size, unsigned int frames, unsigned int lines)
@@ -24,15 +25,15 @@ void add_animation(std::string name, std::string path, sf::Time duration, bool l
 	animation.add_frames(start, size, frames, lines);
 	animations.push_back(animation);
 }
-void create_relations(std::string name, Object::OBJECT_STATES state)
+
+void create_relations(std::string name, int state)
 {
-	relations.insert(std::pair<int, std::string>(state, name));
+    if (state <= body.get_states_count() - 1 and state >= 0)
+    	relations.insert(std::pair<int, std::string>(state, name));
+    else 
+        print_info("error with create relation. wrong state");
 }
 
-void create_relations(std::string name, Fruit::FRUIT_STATES state)
-{
-	relations.insert(std::pair<int, std::string>(state, name));
-}
 
 Body<T>* get_obj_ptr()
 {

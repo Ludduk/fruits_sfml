@@ -2,26 +2,30 @@
 
 #include "General.h"
 
-class Object //терпильный объект, который просто получает урон
+class Object 
 {
 	float health;
 
-	static const int states_count = 2;
-	bool* states = new bool[states_count] {false, false}; //состояние, в которых может находиться объект
-public:
+	bool* states; 
+    public:
+    
 	float MASS;
 	float MAX_HEALTH;
 	int x, y;
 
-	enum OBJECT_STATES //перечисление, созданное для удобства использования состояний
-	{
+	enum OBJECT_STATES 
+    {
 		GET_DAMAGE,
 		DESTROYED
 	};
 
+    virtual int states_count();
+
 	Object(float mass_ = 1.f, float max_health_ = 100.f);
 
     Object(const Object& obj);
+
+    virtual void hit(int damage);
 
 	virtual void set_state(int number, bool val);
 
@@ -29,7 +33,7 @@ public:
 
 	virtual const bool* get_all_states();
 
-	virtual int get_states_count();
+    virtual float get_health();
 
 	virtual bool is_alive();
 
@@ -49,12 +53,11 @@ public:
 	~Object();
 };
 
-class Fruit : public Object //может дать по роже
+class Fruit : public Object 
 {
 	float health;
 
-	static const int states_count = 9;
-	bool* states = new bool[states_count];
+	bool* states;
 public:
 	enum FRUIT_STATES
 	{
@@ -68,7 +71,13 @@ public:
 		HIT_RIGHT,
 		DEAD
 	};
-	float STRENGTH, MASS, MAX_HEALTH;
+	float STRENGTH;
+
+    void set_state(int number, bool val);
+
+    bool get_state(int number);
+
+    int states_count();
 
 	Fruit(float mass_ = 1.f, float max_health_ = 100.f, float strength_ = 50.f);
 
@@ -88,5 +97,9 @@ public:
         STRENGTH  = ft.STRENGTH;
         return *this;
     }
+    //СЌС‚Рѕ Р·Р°РіР»СѓС€РєР° РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ РєРѕРјРїРёР»СЏС‚РѕСЂ РЅРµ СЂСѓРіР°Р»СЃСЏ РЅР° 
+    //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєР»Р°СЃСЃР° Body
+    Fruit& operator = (Object obj) { return *this; }
+
 	~Fruit();
 };

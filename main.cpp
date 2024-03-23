@@ -35,26 +35,31 @@ sf::Vector2f rading_vector(sf::Vector2f const vector)
 
 int main()
 {
-    
     sf::RenderWindow window(sf::VideoMode(1000, 800), "My window");
 
     sf::Sprite sprite;
 
     sprite.setPosition(sf::Vector2f(500.f, 400.f));
     Actor<Fruit> actor(sprite, TYPES::FRUIT, 10.f, 100.f, 50.f);
-    
-    std::cout << actor.get_obj_ptr()->get_states_count();
-
-    actor.add_animation("walk_right", "images//apple_animation.png", sf::seconds(0.5), true, sf::Vector2i(0, 0), sf::Vector2i(48, 48), 6, 1);
+   
+    actor.add_animation("walk_right", "images//apple_animation_v1_4_1.png", sf::seconds(0.8), true, sf::Vector2i(0, 0), sf::Vector2i(80, 48), 6, 1);
 
     actor.create_relations("walk_right", Fruit::FRUIT_STATES::MOVE_RIGHT);
 
-    actor.add_animation("walk_left", "images//apple_animation.png", sf::seconds(0.5), true, sf::Vector2i(49, 49), sf::Vector2i(48, 48), 6, 1);
+    actor.add_animation("walk_left", "images//apple_animation_v1_4_1.png", sf::seconds(0.8), true, sf::Vector2i(0, 49), sf::Vector2(80, 48), 6, 1);
 
     actor.create_relations("walk_left", Fruit::FRUIT_STATES::MOVE_LEFT);
 
+    actor.add_animation("stand_left", "images//apple_animation_v1_4_1.png", sf::seconds(0.8), true, sf::Vector2i(0, 4 * 48 + 1), sf::Vector2(80, 48), 4, 1);
+
+    actor.create_relations("stand_left", Fruit::FRUIT_STATES::STAND_LEFT);
+
     sf::Clock clock;
     clock.restart();
+   
+    auto a = actor.get_obj_ptr();
+    a->set_state(Fruit::FRUIT_STATES::MOVE_LEFT, true);
+    a->set_state(Fruit::FRUIT_STATES::MOVE_RIGHT, false);
 
     while (window.isOpen())
     {
@@ -70,13 +75,17 @@ int main()
                 case sf::Keyboard::D:
                     actor.get_obj_ptr()->set_state(Fruit::FRUIT_STATES::MOVE_RIGHT, true);
                     actor.get_obj_ptr()->set_state(Fruit::FRUIT_STATES::MOVE_LEFT, false);
+                    actor.get_obj_ptr()->set_state(Fruit::FRUIT_STATES::STAND_LEFT, false);
                     break;
                 case sf::Keyboard::A:
                     actor.get_obj_ptr()->set_state(Fruit::FRUIT_STATES::MOVE_LEFT, true);
                     actor.get_obj_ptr()->set_state(Fruit::FRUIT_STATES::MOVE_RIGHT, false);
+                    actor.get_obj_ptr()->set_state(Fruit::FRUIT_STATES::STAND_LEFT, false);
                     break;
                 case sf::Keyboard::W:
-                    
+                    actor.get_obj_ptr()->set_state(Fruit::FRUIT_STATES::STAND_LEFT, true);
+                    actor.get_obj_ptr()->set_state(Fruit::FRUIT_STATES::MOVE_RIGHT, false);                   
+                    actor.get_obj_ptr()->set_state(Fruit::FRUIT_STATES::MOVE_LEFT, false);                   
                     break;
                 case sf::Keyboard::S:
                     

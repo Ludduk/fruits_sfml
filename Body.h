@@ -1,5 +1,5 @@
 #include "Object.h"
-
+#include <typeinfo>
 enum TYPES
 {
 	OBJECT,
@@ -9,34 +9,68 @@ enum TYPES
 template<class T>
 class Body
 {
+    Object obj;
+    Fruit frt;
 	T t;
+    TYPES type;
 
 public:
 
 	bool changed = false;
 
-Body(TYPES type, float mass, float max_health, float strength)
+Body(float mass, float max_health, float strength)
 {
-	if (type == TYPES::OBJECT)
+	if (typeid(t) == typeid(Object))
 	{
-        t = T(mass, max_health);
+        obj = Object(mass, max_health);
+        type = TYPES::OBJECT;
+        t = obj;
 	}
-	else if (type == TYPES::FRUIT)
+	else if (typeid(t) == typeid(Fruit))
 	{
-	    t = T(mass, max_health, strength);
+	    frt = Fruit(mass, max_health, strength);
+        type = TYPES::FRUIT;
+        t = frt;
     }
 	else
 	{
 		print_info("wrong type");
+        return;
 	}
 }
 
-	
+float get_health()
+{
+    return t.get_health();
+}
+
+void hit(int damage)
+{
+    t.hit(damage);
+}
+
+float get_mass()
+{
+    return t.MASS;
+}
+
+float get_max_health()
+{
+    return t.MAX_HEALTH;
+}
+
+float get_strength()
+{
+    if (type == TYPES::OBJECT)
+        return -1.f;
+    return frt.STRENGTH;
+}
+
 bool get_state(int number)
 {
-	if (number >= 0 and number < t.get_states_count())
+	if (number >= 0 and number < t.states_count())
 		return t.get_state(number);
-	print_info("wrong number");
+	print_info("wrong number in get_state");
 	return false;
 }
 
@@ -47,12 +81,12 @@ const bool* get_all_state()
 
 int get_states_count() 
 {
-	return t.get_states_count();
+	return t.states_count();
 }
 
 void set_state(int number, bool val) 
 {
-	if (number >= 0 and number < t.get_states_count())
+	if (number >= 0 and number < t.states_count())
 	{
 		t.set_state(number, val);
 		changed = true;
@@ -63,7 +97,7 @@ void set_state(int number, bool val)
 
 void set_full_state(bool* states, int size) 
 {
-	if (size != t.get_states_count())
+	if (size != t.states_count())
 	{
 		print_info("wrong size of states buf");
 	}
