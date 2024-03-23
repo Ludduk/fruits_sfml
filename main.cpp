@@ -42,15 +42,15 @@ int main()
     sprite.setPosition(sf::Vector2f(500.f, 400.f));
     Actor<Fruit> actor(sprite, TYPES::FRUIT, 10.f, 100.f, 50.f);
    
-    actor.add_animation("walk_right", "images//apple_animation_v1_4_1.png", sf::seconds(0.8), true, sf::Vector2i(0, 0), sf::Vector2i(80, 48), 6, 1);
+    actor.add_animation("walk_right", APPLE_ANIMATIONS_PATH, sf::seconds(0.8), true, sf::Vector2i(0, 0), sf::Vector2i(80, 48), 6, 1);
 
     actor.create_relations("walk_right", Fruit::FRUIT_STATES::MOVE_RIGHT);
 
-    actor.add_animation("walk_left", "images//apple_animation_v1_4_1.png", sf::seconds(0.8), true, sf::Vector2i(0, 49), sf::Vector2(80, 48), 6, 1);
+    actor.add_animation("walk_left", APPLE_ANIMATIONS_PATH, sf::seconds(0.8), true, sf::Vector2i(0, 49), sf::Vector2(80, 48), 6, 1);
 
     actor.create_relations("walk_left", Fruit::FRUIT_STATES::MOVE_LEFT);
 
-    actor.add_animation("stand_left", "images//apple_animation_v1_4_1.png", sf::seconds(0.8), true, sf::Vector2i(0, 4 * 48 + 1), sf::Vector2(80, 48), 4, 1);
+    actor.add_animation("stand_left", APPLE_ANIMATIONS_PATH, sf::seconds(0.8), true, sf::Vector2i(0, 4 * 48 + 1), sf::Vector2(80, 48), 4, 1);
 
     actor.create_relations("stand_left", Fruit::FRUIT_STATES::STAND_LEFT);
 
