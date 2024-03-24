@@ -11,7 +11,6 @@ struct Body
     Vector2f coord;
     Vector2f vel;
     Vector2f acc;
-    Vector2f force;
     Vector2f size;
     const float mass;
     const float max_health;

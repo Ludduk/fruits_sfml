@@ -5,7 +5,6 @@ Body::Body(float mass_, float max_health_, Vector2f size_) : mass(mass_), max_he
     coord = Vector2f(0.f, 0.f);
     vel = coord;
     acc = coord;
-    force = coord;
     health = max_health;
 }
 

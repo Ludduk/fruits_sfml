@@ -1,4 +1,6 @@
+#include <fstream>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -48,16 +50,14 @@ class I
 
 };
 
-
+using namespace std;
 
 int main()
 {
-
-    I<A> i;
-    I<B> j;
-
-    cout << i.get_char() << '\n';
-
-    cout << j.get_char() << '\n';
+    ifstream in("text.txt");
+    string line;
+    while (in >> line)
+        cout << stof(line) << '\n';
+    in.close();
     return 0;
 }

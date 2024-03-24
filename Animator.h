@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <list>
-//#include "General.h"
+#include "General.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 class Animator
@@ -62,13 +62,12 @@ public:
     sf::Sprite* get_sprite_ptr();
 
     ~Animator();
-
 private:
     Animation* find_animation(std::string const& name);
     void switch_animation(Animation* animation);
     sf::Sprite* sprite;
     sf::Time current_time;
     std::list<Animation> animations;
-    Animation* current_animation;
+    Animation* current_animation = nullptr;
     bool end_anim = false;
 };
