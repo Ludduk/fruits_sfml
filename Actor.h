@@ -1,63 +1,31 @@
-#include <SFML/Graphics.hpp>
 #include "Body.h"
 #include "Animator.h"
-#include <list>
-#include <map>
 
-template <class T>
-class Actor //класс, с которым будет работать движок, в нём персонаж объединяется с анимациями
+using namespace sf;
+
+class Fruit
 {
-	sf::Sprite& sprite;
-	Body<T> body;
-	Animator anim;
-	std::list<Animator::Animation> animations;
-	std::map<int, std::string> relations;
-
+    Body body;
+    Animator anim;
+    float strength;
 public:
-	
-Actor(sf::Sprite& sprite_, TYPES type_, float mass, float max_health, float strength) : sprite(sprite_), anim(Animator(sprite_)),
-    body(Body<T>(mass, max_health, strength)) {}
+    
+    Fruit(Sprite* sprite, float mass = 10.f, float max_health = 100.f, float strength = 25.f, Vector2f size = Vector2f(50.f, 50.f));
 
-void add_animation(std::string name, std::string path, sf::Time duration, bool looping, sf::Vector2i const& start,
-        sf::Vector2i const& size, unsigned int frames, unsigned int lines)
+    Body* get_body_ptr();
+
+    Sprite* get_sprite_ptr();
+    ~Fruit();
+
+};
+
+class Object
 {
-	auto& animation = anim.create_animation(name, path, duration, looping);
-	animation.add_frames(start, size, frames, lines);
-	animations.push_back(animation);
-}
+    Body body;
+    Animator anim;
+public:
 
-void create_relations(std::string name, int state)
-{
-    if (state <= body.get_states_count() - 1 and state >= 0)
-    	relations.insert(std::pair<int, std::string>(state, name));
-    else 
-        print_info("error with create relation. wrong state");
-}
+    Object(Sprite* sprite, float mass = 10.f, float max_health = 100.f, Vector2f size = Vector2f(50.f, 50.f));
 
-
-Body<T>* get_obj_ptr()
-{
-	return &body;
-}
-
-void Update(sf::Time dt)
-{
-	if (body.changed)
-	{
-		body.changed = false;
-		int i = body.get_states_count() - 1;
-		while (i >= 0)
-		{
-			if (body.get_state(i))
-			{
-				anim.switch_animation(relations[i]);
-				i = -1; //выходим из цикла
-			}
-			i--;
-		}
-	}
-	anim.Update(dt);
-}
-
-~Actor() {}
+    ~Object();
 };

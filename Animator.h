@@ -2,9 +2,9 @@
 #include <string>
 #include <vector>
 #include <list>
+//#include "General.h"
 #include <SFML/Graphics.hpp>
-#include "General.h"
-
+#include <iostream>
 class Animator
 {
 public:
@@ -43,7 +43,7 @@ public:
 			}
 		}
 	};
-	explicit Animator(sf::Sprite& sprite_);
+	explicit Animator(sf::Sprite* sprite_);
 
 	Animation& create_animation(std::string const& name,
 		std::string const& texture_name, sf::Time const& duration,
@@ -59,12 +59,16 @@ public:
 
 	bool get_end_anim() const;
 
+    sf::Sprite* get_sprite_ptr();
+
+    ~Animator();
+
 private:
-	Animation* find_animation(std::string const& name);
-	void switch_animation(Animation* animation);
-	sf::Sprite& sprite;
-	sf::Time current_time;
-	std::list<Animation> animations;
-	Animation* current_animation;
-	bool end_anim = false;
+    Animation* find_animation(std::string const& name);
+    void switch_animation(Animation* animation);
+    sf::Sprite* sprite;
+    sf::Time current_time;
+    std::list<Animation> animations;
+    Animation* current_animation;
+    bool end_anim = false;
 };

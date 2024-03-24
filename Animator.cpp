@@ -1,6 +1,6 @@
 #include "Animator.h"
 
-Animator::Animator(sf::Sprite& sprite_) : current_animation(nullptr), sprite(sprite_) {}
+Animator::Animator(sf::Sprite* sprite_) : current_animation(nullptr), sprite(sprite_) {}
 
 Animator::Animation& Animator::create_animation(std::string const& name_,
 	std::string const& texture_name_, sf::Time const& duration_, bool loop_)
@@ -16,7 +16,7 @@ void Animator::switch_animation(Animator::Animation* animation)
 {
 	if (animation != nullptr)
 	{
-		sprite.setTexture(animation->texture);
+		sprite->setTexture(animation->texture);
 	}
 	current_animation = animation;
 	current_time = sf::Time::Zero;
@@ -68,10 +68,15 @@ void Animator::Update(sf::Time const& dt)
 	if (current_animation->looping) currentFrame %= numFrames;
 	else if (currentFrame >= numFrames) { currentFrame = numFrames - 1; end_anim = true; }
 
-	sprite.setTextureRect(current_animation->frames[currentFrame]);
+	sprite->setTextureRect(current_animation->frames[currentFrame]);
 }
 
 bool Animator::get_end_anim() const
 {
 	return end_anim;
 }
+
+sf::Sprite* Animator::get_sprite_ptr() { return sprite; }
+
+Animator::~Animator()
+{}

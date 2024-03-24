@@ -1,0 +1,7 @@
+mass health strength
+
+APPLE
+16.5 100.0 50.0
+
+BANANA 
+6.0 50.0 25.0

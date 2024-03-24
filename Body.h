@@ -1,128 +1,24 @@
-#include "Object.h"
-#include <typeinfo>
-enum TYPES
+#pragma once
+
+#include <SFML/Graphics.hpp>
+#include "General.h"
+using namespace sf;
+
+struct Body
 {
-	OBJECT,
-	FRUIT
-};
+    float health;
+    bool hitted = false;
+    Vector2f coord;
+    Vector2f vel;
+    Vector2f acc;
+    Vector2f force;
+    Vector2f size;
+    const float mass;
+    const float max_health;
 
-template<class T>
-class Body
-{
-    Object obj;
-    Fruit frt;
-	T t;
-    TYPES type;
+    Body(float mass_ = 10.f, float max_health_ = 100.f, Vector2f size_ = Vector2f(50.f, 50.f));
+    
+    
 
-public:
-
-	bool changed = false;
-
-Body(float mass, float max_health, float strength)
-{
-	if (typeid(t) == typeid(Object))
-	{
-        obj = Object(mass, max_health);
-        type = TYPES::OBJECT;
-        t = obj;
-	}
-	else if (typeid(t) == typeid(Fruit))
-	{
-	    frt = Fruit(mass, max_health, strength);
-        type = TYPES::FRUIT;
-        t = frt;
-    }
-	else
-	{
-		print_info("wrong type");
-        return;
-	}
-}
-
-float get_health()
-{
-    return t.get_health();
-}
-
-void hit(int damage)
-{
-    t.hit(damage);
-}
-
-float get_mass()
-{
-    return t.MASS;
-}
-
-float get_max_health()
-{
-    return t.MAX_HEALTH;
-}
-
-float get_strength()
-{
-    if (type == TYPES::OBJECT)
-        return -1.f;
-    return frt.STRENGTH;
-}
-
-bool get_state(int number)
-{
-	if (number >= 0 and number < t.states_count())
-		return t.get_state(number);
-	print_info("wrong number in get_state");
-	return false;
-}
-
-const bool* get_all_state()
-{
-	return t.get_all_states();
-}
-
-int get_states_count() 
-{
-	return t.states_count();
-}
-
-void set_state(int number, bool val) 
-{
-	if (number >= 0 and number < t.states_count())
-	{
-		t.set_state(number, val);
-		changed = true;
-	}
-	else
-		print_info("wrong number of state");
-}
-
-void set_full_state(bool* states, int size) 
-{
-	if (size != t.states_count())
-	{
-		print_info("wrong size of states buf");
-	}
-	else
-	{
-		for (int i = 0; i < size; i++)
-			set_state(i, states[i]);
-	}
-}
-
-bool is_alive()
-{
-	return t.is_alive();
-}
-
-void move(int dx, int dy)
-{
-	t.x += dx;
-	t.y += dy;
-}
-
-void set_coord(int new_x, int new_y)
-{
-	t.x = new_x;
-	t.xt.y = new_y;
-}
-~Body() {}
+    ~Body();
 };
