@@ -1,5 +1,7 @@
 NAME
 mass    health    strength
+body_area
+hit_size
 -
 animations_path
 frame_x frame_y
@@ -12,6 +14,8 @@ frames_count rankes
 
 APPLE
 10.0 100.0 50.0
+60 70 75 35
+60 30
 -
 images/apple_animation_v1_4_1.png
 80  48
@@ -29,25 +33,25 @@ left_walk  5
 ]
 [
 right_stand 4
-0.5 1
+0.7 1
 0   192
 4   1
 ]
 [
 left_stand  4
-0.5 1
+0.7 1
 0   240
 4   1
 ]
 [
 right_hit 7
-0.3 0
+0.4 0
 0   96
 5   1
 ]
 [
 left_hit    7
-0.3 0
+0.4 0
 0   144
 5   1
 ]
@@ -56,6 +60,51 @@ left_hit    7
 
 
 
-
 BANANA 
 6.0 50.0 25.0
+35 100 60 35
+25 20
+-
+images/banan_v1_52.png
+48	64
+
+[
+left_walk	5
+0.6	1
+0	0
+4	1
+]
+[
+right_walk	5
+0.6	1
+0	64
+4	1
+]
+[
+left_stand	4
+0.6	1
+192	0
+1	1
+]
+[
+right_stand	4
+0.6	1
+192	64
+1	1
+]
+[
+left_hit	7
+0.3	0
+0	128
+5	1
+]
+[
+right_hit	7
+0.3	0
+0	192
+5	1
+]
+
+
+
+

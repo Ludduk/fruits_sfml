@@ -22,7 +22,7 @@ public:
 
     void reset_all();
 
-    pair<string, bool> get_most_priority_state();
+    pair<string, bool> get_most_priority_active_state();
 
 };
 
@@ -30,11 +30,14 @@ class Fruit
 {
     Body body;
     Animator anim;
-    float strength;
     States rel;
-public:
     
-    Fruit(Sprite* sprite, float mass = 10.f, float max_health = 100.f, float strength = 25.f, Vector2f size = Vector2f(50.f, 50.f));
+public:
+
+    float strength;
+    Vector2i hitting_area;
+    Fruit(Sprite* sprite, float mass = 10.f, float max_health = 100.f, float strength_ = 25.f, IntRect area = IntRect(0, 0, 50, 50),
+            Vector2i hitting_area_ = Vector2i(10, 10));
 
     States* get_states_ptr();
 
@@ -43,6 +46,8 @@ public:
     Sprite* get_sprite_ptr();
 
     Animator* get_anim_ptr();
+
+    bool operator > (Fruit& frt);
 
     ~Fruit();
 
@@ -55,7 +60,7 @@ class Object
     States rel;
 public:
 
-    Object(Sprite* sprite, float mass = 10.f, float max_health = 100.f, Vector2f size = Vector2f(50.f, 50.f));
+    Object(Sprite* sprite, float mass = 10.f, float max_health = 100.f, IntRect area = IntRect(0, 0, 50, 50));
 
     ~Object();
 };

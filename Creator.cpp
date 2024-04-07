@@ -14,11 +14,12 @@ bool is_count(string line)
     return true;
 }
 
-bool parse_chars(string name, float& mass, float& max_health, float& strength)
+bool parse_chars(string name, float& mass, float& max_health, float& strength, IntRect& area, Vector2i& hitting)
 {
     int counter = 0;
     bool start = false;
     bool end = false;
+    int left, top, width, height;
     ifstream in(TEMPLATES_PATH);
     if (!in.is_open())
         return false;
@@ -44,6 +45,32 @@ bool parse_chars(string name, float& mass, float& max_health, float& strength)
                             break;
                         case 2:
                             strength = stof(word);
+                            counter++;
+                            break;
+                        case 3:
+                            left = stoi(word);
+                            counter++;
+                            break;
+                        case 4:
+                            top = stoi(word);
+                            counter++;
+                            break;
+                        case 5:
+                            width = stoi(word);
+                            counter++;
+                            break;
+                        case 6:
+                            height = stoi(word);
+                            area = IntRect(left, top, width, height);
+                            counter++;
+                            break;
+                        case 7:
+                            hitting.x = stoi(word);
+                            counter++;
+                            break;
+                        case 8:
+                            hitting.y = stoi(word);
+                            counter++;
                             end = true;
                             break;
                         default:
@@ -127,13 +154,15 @@ bool create_fruit(string name, vector<Fruit*>& fruits)
 {
     Sprite* sprite = new Sprite;
     float mass, max_health, strength;
-    if (!parse_chars(name, mass, max_health, strength))
+    IntRect area;
+    Vector2i hitting;
+    if (!parse_chars(name, mass, max_health, strength, area, hitting))
     {
         print_info("parse error");
         return false;
     }
     sprite->setScale(2.5f, 2.5f);
-    Fruit* frt = new Fruit(sprite, mass, max_health, strength);
+    Fruit* frt = new Fruit(sprite, mass, max_health, strength, area, hitting);
     if (!animating_fruit(name, frt))
     {
         print_info("animating error");

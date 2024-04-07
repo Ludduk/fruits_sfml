@@ -2,9 +2,9 @@
 
 using namespace sf;
 using namespace std;
-Fruit::Fruit(Sprite* sprite, float mass, float max_health, float strength_, Vector2f size) : anim(Animator(sprite)), 
-    body(Body(mass, max_health, size)),
-    strength(strength_) {}
+Fruit::Fruit(Sprite* sprite, float mass, float max_health, float strength_, IntRect area, Vector2i hitting_area_) : anim(Animator(sprite)), 
+    body(Body(mass, max_health, area)),
+    strength(strength_), hitting_area(hitting_area_) {}
 
 States* Fruit::get_states_ptr() { return &rel; }
 
@@ -14,10 +14,15 @@ Sprite* Fruit::get_sprite_ptr() { return anim.get_sprite_ptr(); }
 
 Animator* Fruit::get_anim_ptr() { return &anim; }
 
+bool Fruit::operator > (Fruit& frt)
+{
+    return body.coord.y + body.area.top + body.area.height > frt.body.coord.y + frt.body.area.top + frt.body.area.height;
+}
+
 Fruit::~Fruit() {}
 
 
-Object::Object(Sprite* sprite, float mass, float max_health, Vector2f size) : anim(Animator(sprite)), body(Body(mass, max_health, size)) {}
+Object::Object(Sprite* sprite, float mass, float max_health, IntRect area) : anim(Animator(sprite)), body(Body(mass, max_health, area)) {}
 
 Object::~Object() {}
 
@@ -37,11 +42,15 @@ bool States::get_state(string name)
 
 bool States::set_state(string name, bool val)
 {
-    change = true;
     if (states.count(name) == 0)
         return false;
-    states[name] = val;
-    return true;
+    if (val != states[name])
+    {
+        states[name] = val;
+        change = true;
+        return true;
+    }
+    return false;
 }
 
 void States::reset_all()
@@ -51,7 +60,7 @@ void States::reset_all()
         el.second = false;
 }
 
-pair<string, bool> States::get_most_priority_state()
+pair<string, bool> States::get_most_priority_active_state()
 {
     string max_str = "";
     int max_pr = -1;
@@ -59,7 +68,7 @@ pair<string, bool> States::get_most_priority_state()
         return make_pair("", false);
 
     for (auto el : priorities)
-        if (el.second > max_pr or max_pr == -1)
+        if ((el.second > max_pr or max_pr == -1) and states[el.first])
         {
             max_str = el.first;
             max_pr = el.second;

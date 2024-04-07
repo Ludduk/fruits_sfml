@@ -16,6 +16,7 @@ void Animator::switch_animation(Animator::Animation* animation)
 	{
 		sprite->setTexture(animation->texture);
 	}
+    end_anim = false;
 	current_animation = animation;
 	current_time = sf::Time::Zero;
 }

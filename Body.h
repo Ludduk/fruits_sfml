@@ -11,11 +11,11 @@ struct Body
     Vector2f coord;
     Vector2f vel;
     Vector2f acc;
-    Vector2f size;
+    IntRect area;
     const float mass;
     const float max_health;
 
-    Body(float mass_ = 10.f, float max_health_ = 100.f, Vector2f size_ = Vector2f(50.f, 50.f));
+    Body(float mass_ = 10.f, float max_health_ = 100.f, IntRect area_ = IntRect(0, 0, 50, 50));
     
     
 
