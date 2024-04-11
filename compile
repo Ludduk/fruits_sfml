@@ -1,4 +1,4 @@
 #! /bin/bash
 g++ main.cpp -c -g 
-g++ main.o -o main -lsfml-graphics -lsfml-window -lsfml-system General.cpp Animator.cpp Body.cpp Actor.cpp Creator.cpp
+g++ main.o -o main -lsfml-graphics -lsfml-window -lsfml-system General.cpp Animator.cpp Body.cpp Actor.cpp Creator.cpp Map.cpp
 

@@ -153,8 +153,6 @@ namespace Physics
         
         b->coord += b->vel * coef * dt_;
 
-        print_info(rad(b->vel * coef));
-        
         if (rad(b->vel) > -eps and rad(b->vel) < eps)
             b->vel = Vector2f(0.f, 0.f);
     }
@@ -182,11 +180,12 @@ namespace Physics
     {
         for (auto el : fruits)
         {
-            float mass = el->get_body_ptr()->mass;
+            auto body = el->get_body_ptr();
+            float mass = body->mass;
             if (el == PLAYER_PTR)
-                move(el->get_body_ptr(), dt, MOVE_FORCE * Vector2f(Controller::get_dir_x(), -Controller::get_dir_y()));
+                move(body, dt, MOVE_FORCE * Vector2f(Controller::get_dir_x(), -Controller::get_dir_y()));
             else
-                move(el->get_body_ptr(), dt);
+                move(body, dt);
         }
     }
 }
@@ -205,45 +204,50 @@ namespace Graphics
              s_body = s->get_body_ptr();
         return f_body->coord.y + f_body->area.top + f_body->area.height < s_body->coord.y + s_body->area.top + s_body->area.height;
     }
+   
+    
     void update(RenderWindow& win, Time dt)
     {
         sort(fruits.begin(), fruits.end(), coord_compare);
-        Sprite* tmp;
+        Sprite* sprite;
         win.clear(Color::White);
         for (auto el : fruits)
         {
-            tmp = el->get_sprite_ptr();
-
-            if (el->get_anim_ptr()->get_end_anim())
-                el->get_states_ptr()->set_state(el->get_anim_ptr()->get_current_anim_name(), false);
-
-            if (el->get_states_ptr()->change)
-            {
-                el->get_states_ptr()->change = false;
-                string curr_name = el->get_states_ptr()->get_most_priority_active_state().first;
-                if (curr_name.compare(el->get_anim_ptr()->get_current_anim_name()) != 0)
-                    el->get_anim_ptr()->switch_animation(curr_name);
-            }
-            el->get_anim_ptr()->Update(dt);
-            tmp->setPosition(el->get_body_ptr()->coord);
-            win.draw(*tmp);
+            sprite = el->get_sprite_ptr();
+            auto anim = el->get_anim_ptr();
+            auto states = el->get_states_ptr();
             auto body = el->get_body_ptr();
-            if (el->get_states_ptr()->get_state("right_hit"))
+            if (anim->get_end_anim())
+                states->set_state(anim->get_current_anim_name(), false);
+
+            if (states->change)
             {
-                hit.setPosition(Vector2f(body->area.width, body->area.height - el->hitting_area.y) + tmp->getPosition() + Vector2f(el->get_body_ptr()->area.left, el->get_body_ptr()->area.top));
+                states->change = false;
+                string curr_name = states->get_most_priority_active_state().first;
+                if (curr_name.compare(anim->get_current_anim_name()) != 0)
+                    anim->switch_animation(curr_name);
+            }
+            anim->Update(dt);
+            sprite->setPosition(body->coord);
+            win.draw(*sprite);
+            
+
+            if (states->get_state("right_hit"))
+            {
+                hit.setPosition(Vector2f(body->area.width, body->area.height - el->hitting_area.y) + sprite->getPosition() + Vector2f(body->area.left, body->area.top));
                 hit.setSize(Vector2f(el->hitting_area));
                 hit.setFillColor(Color(255, 0, 0, 128));
                 win.draw(hit);
             }
-            else if (el->get_states_ptr()->get_state("left_hit"))
+            else if (states->get_state("left_hit"))
             {
-                hit.setPosition(Vector2f(-el->hitting_area.x, body->area.height - el->hitting_area.y) + tmp->getPosition() + Vector2f(el->get_body_ptr()->area.left, el->get_body_ptr()->area.top));
+                hit.setPosition(Vector2f(-el->hitting_area.x, body->area.height - el->hitting_area.y) + sprite->getPosition() + Vector2f(body->area.left, body->area.top));
                 hit.setSize(Vector2f(el->hitting_area));
                 hit.setFillColor(Color(255, 0, 0, 128));
                 win.draw(hit);
             }
-            rectangle.setPosition(tmp->getPosition() + Vector2f(body->area.left, body->area.top));
-            rectangle.setSize(Vector2f(el->get_body_ptr()->area.width, el->get_body_ptr()->area.height));
+            rectangle.setPosition(sprite->getPosition() + Vector2f(body->area.left, body->area.top));
+            rectangle.setSize(Vector2f(body->area.width, body->area.height));
             rectangle.setFillColor(Color(0, 255, 0, 128));
             win.draw(rectangle);
        
