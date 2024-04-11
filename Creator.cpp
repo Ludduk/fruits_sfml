@@ -48,19 +48,19 @@ bool parse_chars(string name, float& mass, float& max_health, float& strength, I
                             counter++;
                             break;
                         case 3:
-                            left = stoi(word);
+                            left = SCALE * stoi(word);
                             counter++;
                             break;
                         case 4:
-                            top = stoi(word);
+                            top = SCALE * stoi(word);
                             counter++;
                             break;
                         case 5:
-                            width = stoi(word);
+                            width = SCALE * stoi(word);
                             counter++;
                             break;
                         case 6:
-                            height = stoi(word);
+                            height = SCALE * stoi(word);
                             area = IntRect(left, top, width, height);
                             counter++;
                             break;
@@ -161,7 +161,7 @@ bool create_fruit(string name, vector<Fruit*>& fruits)
         print_info("parse error");
         return false;
     }
-    sprite->setScale(2.5f, 2.5f);
+    sprite->setScale(SCALE, SCALE);
     Fruit* frt = new Fruit(sprite, mass, max_health, strength, area, hitting);
     if (!animating_fruit(name, frt))
     {

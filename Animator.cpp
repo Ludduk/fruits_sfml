@@ -78,6 +78,14 @@ void Animator::Update(sf::Time const& dt)
 	sprite->setTextureRect(current_animation->frames[currentFrame]);
 }
 
+int Animator::current_frame()
+{
+    if (current_animation == nullptr)
+        return -1;
+
+    return static_cast<int>(current_animation->frames.size() * current_time.asSeconds() / current_animation->duration.asSeconds());
+}
+
 bool Animator::get_end_anim() const
 {
 	return end_anim;

@@ -59,6 +59,8 @@ public:
 
 	bool get_end_anim() const;
 
+    int current_frame();
+
     sf::Sprite* get_sprite_ptr();
 
     ~Animator();
