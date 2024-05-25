@@ -16,8 +16,7 @@ const std::string BACK_PATH = "images/background_v_3_1.png";
 const std::string FRONT_PATH = "images/frontground_v_3_1.png";
 const std::string APPLE_ANIMATIONS_PATH = "images/apple_animation_v1_4_1.png";
 const std::string TEMPLATES_PATH = "templates.txt";
-void print_info(std::string msg); //процедура вывода системной инфы для программиста, может быть переделана
-
+void print_info(std::string msg);
 void print_info(float count);
 
 void print_info(int count);

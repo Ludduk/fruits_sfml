@@ -20,12 +20,6 @@ float TIME_CONSTANT_MIL = FRAME_LIM / 1000.f;
 int PLAYER_ID = 0;
 Fruit* PLAYER_PTR = nullptr;
 
-
-Vector2f get_abs_body_coord(Body* body)
-{
-    return body->coord + Vector2f(body->area.left, body->area.top);
-}
-
 //обработка нажатий и поведения персов в целом
 namespace Controller
 {
