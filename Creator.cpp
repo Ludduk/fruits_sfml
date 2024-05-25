@@ -4,6 +4,15 @@
 using namespace sf;
 using namespace std;
 
+struct Doll
+{
+    float mass;
+    float max_health;
+    float strength;
+    IntRect area;
+    Vector2i hitting;
+};
+
 bool is_count(string line)
 {
     for (int i = 0; i < line.size(); i++)
@@ -14,7 +23,7 @@ bool is_count(string line)
     return true;
 }
 
-bool parse_chars(string name, float& mass, float& max_health, float& strength, IntRect& area, Vector2i& hitting)
+bool parse_chars(string name, Doll& doll)
 {
     int counter = 0;
     bool start = false;
@@ -36,15 +45,15 @@ bool parse_chars(string name, float& mass, float& max_health, float& strength, I
                     switch (counter)
                     {
                         case 0:
-                            mass = stof(word);
+                            doll.mass = stof(word);
                             counter++;
                             break;
                         case 1:
-                            max_health = stof(word);
+                            doll.max_health = stof(word);
                             counter++;
                             break;
                         case 2:
-                            strength = stof(word);
+                            doll.strength = stof(word);
                             counter++;
                             break;
                         case 3:
@@ -61,15 +70,15 @@ bool parse_chars(string name, float& mass, float& max_health, float& strength, I
                             break;
                         case 6:
                             height = SCALE * stoi(word);
-                            area = IntRect(left, top, width, height);
+                            doll.area = IntRect(left, top, width, height);
                             counter++;
                             break;
                         case 7:
-                            hitting.x = stoi(word);
+                            doll.hitting.x = stoi(word);
                             counter++;
                             break;
                         case 8:
-                            hitting.y = stoi(word);
+                            doll.hitting.y = stoi(word);
                             counter++;
                             end = true;
                             break;
@@ -156,13 +165,14 @@ bool create_fruit(string name, vector<Fruit*>& fruits)
     float mass, max_health, strength;
     IntRect area;
     Vector2i hitting;
-    if (!parse_chars(name, mass, max_health, strength, area, hitting))
+    Doll doll; 
+    if (!parse_chars(name, doll))
     {
         print_info("parse error");
         return false;
     }
     sprite->setScale(SCALE, SCALE);
-    Fruit* frt = new Fruit(sprite, mass, max_health, strength, area, hitting);
+    Fruit* frt = new Fruit(sprite, doll.mass, doll.max_health, doll.strength, doll.area, doll.hitting);
     if (!animating_fruit(name, frt))
     {
         print_info("animating error");

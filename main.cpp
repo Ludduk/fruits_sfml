@@ -20,6 +20,11 @@ float TIME_CONSTANT_MIL = FRAME_LIM / 1000.f;
 int PLAYER_ID = 0;
 Fruit* PLAYER_PTR = nullptr;
 
+bool is_equals(float a, float b)
+{
+    return a > b - eps and a < b + eps;
+}
+
 //обработка нажатий и поведения персов в целом
 namespace Controller
 {
@@ -166,7 +171,8 @@ namespace Physics
     void norm(Vector2f& vec)
     {
         float r = rad(vec);
-        if (r > -eps and r < eps)
+        
+        if (is_equals(r, 0.f))
             return;
         vec.x /= r;
         vec.y /= r;
@@ -200,6 +206,7 @@ namespace Physics
 
     const float friction = 0.9f;
     float coef = 1.f;
+    float angle_coef = 0.6f;
     void move(Body* b, Time dt, Vector2f force = Vector2f(0.f, 0.f))
     {
         coef = 1.f;
@@ -212,7 +219,8 @@ namespace Physics
         if (abs((abs(force.x) - abs(force.y)) < eps))
             coef = 1 / SQRT2;
         Vector2f vel_y_compress = b->vel;
-        vel_y_compress.y *= 0.6f;
+
+        vel_y_compress.y *= angle_coef;
        
         Vector2f pred_coord = b->coord + vel_y_compress * coef * dt_;
 
@@ -222,14 +230,10 @@ namespace Physics
             b->coord.y = pred_coord.y;
 
         
-        if (rad(b->vel) > -eps and rad(b->vel) < eps)
+        if (is_equals(rad(b->vel), 0.f))
             b->vel = Vector2f(0.f, 0.f);
     }
-    void hit(Body b, float strength);
-    void set_coord(Body b, Vector2f coord);
-    void set_vel(Body b, Vector2f vel);
-    void set_acc(Body b, Vector2f acc);
-
+    
     float dist(Body f, Body s);
 
     bool can_move(Body b, Vector2f dvec);
@@ -348,6 +352,20 @@ namespace Graphics
     }
 }
 
+void create_walls()
+{
+    land->create_restr_area(IntRect(0, 0, WIDTH, 90));
+    land->create_restr_area(IntRect(0, 0, 45, HEIGHT));
+    land->create_restr_area(IntRect(WIDTH - 25, 0, 25, HEIGHT));
+    land->create_restr_area(IntRect(0, HEIGHT - 20, WIDTH, 20));
+}
+
+void put_fruit(Fruit* frt, Vector2f coord = Vector2f(500.f, 500.f), string stand = "right_walk")
+{
+    frt->get_states_ptr()->set_state(stand, true);
+    frt->get_body_ptr()->coord = coord;
+}
+
 //создаётся окно, начало программы
 int main()
 {
@@ -356,10 +374,8 @@ int main()
     win.setPosition(Vector2i(400, 300));
     
     land = new Land(BACK_PATH, FRONT_PATH);
-    land->create_restr_area(IntRect(0, 0, WIDTH, 90));
-    land->create_restr_area(IntRect(0, 0, 45, HEIGHT));
-    land->create_restr_area(IntRect(WIDTH - 25, 0, 25, HEIGHT));
-    land->create_restr_area(IntRect(0, HEIGHT - 20, WIDTH, 20));
+    create_walls();
+
 
     /*RectangleShape rec(Vector2f(WIDTH, 20));
     rec.setPosition(Vector2f(0, HEIGHT - 20));
@@ -368,11 +384,11 @@ int main()
     create_fruit("APPLE", fruits);
     create_fruit("BANANA", fruits);
 
-    fruits[0]->get_states_ptr()->set_state("right_stand", true);
-    fruits[0]->get_body_ptr()->coord = Vector2f(500.f, 400.f);
+    put_fruit(fruits[0]);
+    
     PLAYER_PTR = fruits[0];
-    fruits[1]->get_body_ptr()->coord = Vector2f(400.f, 300.f);
-    fruits[1]->get_states_ptr()->set_state("right_walk", true);
+
+    put_fruit(fruits[1], Vector2f(400.f, 300.f));
     
     Clock frame_time;
     frame_time.restart();
